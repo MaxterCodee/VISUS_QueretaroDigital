@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => '7ff678c51610c4cfc9552194ab38fa04f3de5080',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -650,12 +650,12 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => '7ff678c51610c4cfc9552194ab38fa04f3de5080',
             'dev_requirement' => false,
         ),
         'laravel/pint' => array(
@@ -924,6 +924,15 @@
             'aliases' => array(),
             'reference' => '4f7fd7836c6f332bb2933569e566a0d6c4cbed74',
             'dev_requirement' => true,
+        ),
+        'php-ai/php-ml' => array(
+            'pretty_version' => '0.10.0',
+            'version' => '0.10.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-ai/php-ml',
+            'aliases' => array(),
+            'reference' => '543f11158c57bf64ef8ddecd5bab51d396d39f50',
+            'dev_requirement' => false,
         ),
         'phpdocumentor/reflection-common' => array(
             'pretty_version' => '2.2.0',

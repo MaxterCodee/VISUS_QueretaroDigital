@@ -59,7 +59,7 @@
                         <a href="#"
                             class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Variables</a>
                     </li>
-                    
+
                 </ul>
             </li>
 
@@ -71,6 +71,7 @@
                     @csrf
                     <button type="submit"
                         class="flex items-center p-2 rounded-lg group flex items-center w-full text-left {{ Route::is('logout') ? 'text-gray-900 bg-blue-100 dark:text-white dark:bg-gray-700' : 'text-gray-900 dark:text-white hover:bg-red-100 dark:hover:bg-gray-700' }}">
+                    <button type="submit" class="flex items-center p-2 rounded-lg group w-full text-left {{ Route::is('logout') ? 'text-gray-900 bg-blue-100 dark:text-white dark:bg-gray-700' : 'text-gray-900 dark:text-white hover:bg-red-100 dark:hover:bg-gray-700' }}">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span class="ms-3">Cerrar sesión</span>
                     </button>
