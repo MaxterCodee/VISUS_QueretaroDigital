@@ -4,7 +4,7 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-    <form method="GET" action="{{ route('resultados') }}" class="flex justify-end items-center space-x-4 p-4">
+    <form method="GET" action="{{ route('resultados') }}" class="flex items-center space-x-4 p-4">
         <label for="dias" class="text-gray-700">Selecciona el número de días:</label>
         <select name="dias" id="dias" class="border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             @for($i = 10; $i <= 100; $i += 10)
