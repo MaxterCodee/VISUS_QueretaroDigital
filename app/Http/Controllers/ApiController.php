@@ -13,4 +13,9 @@ class ApiController extends Controller
 
         return response()->json($TipoReserva);
     }
+
+    public function index()
+    {
+        return view('chatbot');
+    }
 }
