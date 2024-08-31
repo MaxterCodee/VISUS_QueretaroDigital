@@ -22,4 +22,9 @@ class Sensore extends Model
         return $this->hasMany(Dato::class);
     }
 
+    public function predicciones()
+    {
+        return $this->hasMany(Prediccione::class);
+    }
+
 }
