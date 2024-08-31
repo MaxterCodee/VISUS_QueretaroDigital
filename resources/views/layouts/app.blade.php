@@ -37,6 +37,7 @@
         <div class="rounded-lg mt-14">
             <!-- Page Content -->
             <main>
+                @include('components.chatbubble')
                 {{ $slot }}
             </main>
         </div>
