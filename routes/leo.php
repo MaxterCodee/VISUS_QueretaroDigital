@@ -42,6 +42,7 @@ Route::middleware([
     Route::delete('/admin/sensor',[AdministradorController::class, 'eliminarSensor'])->name('eliminarSensor');
     Route::delete('/admin/tipoSensor',[AdministradorController::class, 'eliminarTipoSensor'])->name('eliminarTipoSensor');
     Route::delete('/admin/bomba',[AdministradorController::class, 'eliminarBomba'])->name('eliminarBomba');
-    
+
+    Route::get('/admin/predicción',[AdministradorController::class, 'indexMapas'])->name('indexMapas');
 
 });

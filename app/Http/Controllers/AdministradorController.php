@@ -16,7 +16,7 @@ class AdministradorController extends Controller
     //Tipo de Reserva
     public function indexTipoReserva(){
         $tipoReserva = TipoReserva::all();
-        
+
         return view('administrador.tipoReserva', compact('tipoReserva'));
     }
     public function crearReser(Request $request){
@@ -159,7 +159,7 @@ class AdministradorController extends Controller
     public function crearTipoSensor(Request $request){
         $request->validate([
             'nombre' => 'required',
-            'max_val' => 'required', 
+            'max_val' => 'required',
             'min_val' => 'required',
             'unidad' => 'required',
         ]);
@@ -173,11 +173,11 @@ class AdministradorController extends Controller
 
         return redirect()->route('indexTipoSensor');
     }
-     
+
     public function editarTipoSensor(Request $request){
         $request->validate([
             'nombre' => 'required',
-            'max_val' => 'required', 
+            'max_val' => 'required',
             'min_val' => 'required',
             'unidad' => 'required',
         ]);
@@ -191,7 +191,7 @@ class AdministradorController extends Controller
 
         return redirect()->route('indexTipoSensor');
     }
-     
+
     public function eliminarTipoSensor(Request $request){
         $tipoSensor = TipoSensor::find($request->id);
         $tipoSensor->delete();
@@ -238,6 +238,12 @@ class AdministradorController extends Controller
         $bomba->delete();
 
         return redirect()->route('indexBomba');
+    }
+
+
+    public function indexMapas(){
+        $reservas = Reserva::all();
+        return view('administrador.predicciones', compact('reservas'));
     }
 
 }

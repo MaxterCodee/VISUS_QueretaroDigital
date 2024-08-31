@@ -36,14 +36,14 @@ class sensoresSeeder extends Seeder
         $reserva = Reserva::create([
             'nombre' => 'Acueducto II',
             'descripcion' => 'Holis',
-            'coordenadas' => '[20.676707, -100.309517]',
+            'coordenadas' => '20.676707, -100.309517',
             'tipo_reserva_id' => 1
         ]);
 
         $reserva1 = Reserva::create([
             'nombre' => 'Acuifero de Guadalupe',
             'descripcion' => 'Holisx2',
-            'coordenadas' => '[20.439823, -100.089939]',
+            'coordenadas' => '20.439823, -100.089939',
             'tipo_reserva_id' => 2
         ]);
 
