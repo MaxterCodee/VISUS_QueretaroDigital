@@ -52,12 +52,16 @@
                             class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Reservas</a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="{{route('indexTipoSensor')}}"
+                            class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Tipo de sensores</a>
+                    </li>
+                    <li>
+                        <a href="{{route('indexSensor')}}"
                             class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Sensores</a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Variables</a>
+                        <a href="{{route('indexMapas')}}"
+                            class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Predicciones</a>
                     </li>
 
                 </ul>
@@ -71,7 +75,10 @@
                     @csrf
                     <button type="submit"
                         class="flex items-center p-2 rounded-lg group flex items-center w-full text-left {{ Route::is('logout') ? 'text-gray-900 bg-blue-100 dark:text-white dark:bg-gray-700' : 'text-gray-900 dark:text-white hover:bg-red-100 dark:hover:bg-gray-700' }}">
+<<<<<<< HEAD
                     <button type="submit" class="flex items-center p-2 rounded-lg group w-full text-left {{ Route::is('logout') ? 'text-gray-900 bg-blue-100 dark:text-white dark:bg-gray-700' : 'text-gray-900 dark:text-white hover:bg-red-100 dark:hover:bg-gray-700' }}">
+=======
+>>>>>>> e403bb48fd4dee591700c56471eafe0004623d31
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span class="ms-3">Cerrar sesión</span>
                     </button>

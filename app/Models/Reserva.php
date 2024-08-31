@@ -11,8 +11,8 @@ class Reserva extends Model
 
     protected $fillable = ['nombre', 'descripcion', 'coordenadas', 'tipo_reserva_id'];
 
-    public function tipo()
+    public function tipos()
     {
-        return $this->belongsTo(TipoReserva::class);
+        return $this->belongsTo(TipoReserva::class, 'tipo_reserva_id');
     }
 }

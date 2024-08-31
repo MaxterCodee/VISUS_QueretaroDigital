@@ -25,38 +25,7 @@
 
 
                                 <script>
-
-                                    async function api2() {
-                                                const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
-                                                        'Authorization': 'Bearer be1ee4c179f644d390fa239d1001d2f9'
-                                                    },
-                                                    body: JSON.stringify({
-                                                        model: 'gpt-4o-2024-08-06',
-                                                        messages: [
-                                                            {
-                                                                role: 'system',
-                                                                content: 'You are an AI assistant who knows everything.'
-                                                                max-tonkens: 50;
-                                                            },
-                                                            {
-                                                                role: 'user',
-                                                                content: 'Tell me, why is the sky blue?'
-                                                            }
-                                                        ]
-                                                    })
-                                                    max-tokens: 50,
-                                                });
-
-                                                const result = await response.json();
-                                                const message = result.choices[0].message.content;
-                                                console.log(`Assistant: ${message}`);
-                                                alert(`Assistant: ${message}`);
-                                            }
-
-                                                                    // Función para realizar una solicitud con reintentos en caso de error 429
+                                    // Función para realizar una solicitud con reintentos en caso de error 429
                                     async function fetchWithRetry(url, options, retries = 5, delay = 1000) {
                                         try {
                                             const response = await fetch(url, options);
@@ -78,7 +47,51 @@
                                         }
                                     }
 
-                                    // Función principal para realizar la solicitud a la API externa
+                                    // Función para hacer una solicitud simple a la API externa
+                                    async function api2() {
+                                        try {
+                                            const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'Authorization': 'Bearer be1ee4c179f644d390fa239d1001d2f9'
+                                                },
+                                                body: JSON.stringify({
+                                                    model: 'gpt-4o-2024-08-06',
+                                                    messages: [
+                                                        {
+                                                            role: 'system',
+                                                            content: 'You are an AI assistant who knows everything.'
+                                                        },
+                                                        {
+                                                            role: 'user',
+                                                            content: 'Tell me, why is the sky blue?'
+                                                        }
+                                                    ],
+                                                    max_tokens: 50  // Añadir limitación de tokens
+                                                })
+                                            });
+
+                                            if (!response.ok) {
+                                                throw new Error(`Error fetching external API: ${response.status}`);
+                                            }
+
+                                            const result = await response.json();
+                                            if (result.choices && Array.isArray(result.choices) && result.choices.length > 0) {
+                                                const message = result.choices[0].message.content;
+                                                console.log(`Assistant: ${message}`);
+                                                alert(`Assistant: ${message}`);
+                                            } else {
+                                                console.error('No choices found in the response:', result);
+                                                alert('No response received.');
+                                            }
+                                        } catch (error) {
+                                            console.error('Error:', error);
+                                            alert('An error occurred.');
+                                        }
+                                    }
+
+                                    // Función principal para realizar la solicitud a la API externa con datos locales
                                     async function api() {
                                         try {
                                             // Primero obtenemos los datos de la API local
@@ -107,7 +120,8 @@
                                                             role: 'user',
                                                             content: `Interpreta el array data: ${dataString} y dime qué es.`
                                                         }
-                                                    ]
+                                                    ],
+                                                    max_tokens: 50  // Limita la respuesta a 50 tokens
                                                 })
                                             });
 
@@ -131,15 +145,13 @@
                                         }
                                     }
 
-                                    // Llama a la función api() al cargar la página o en el evento deseado
-                                    document.addEventListener('DOMContentLoaded', (event) => {
-                                        api();
-                                    });
-
-
+                                    // Función para cargar datos locales y mostrarlos
                                     async function pruebaText() {
                                         try {
                                             const response = await fetch('/tipo_reserva');
+                                            if (!response.ok) {
+                                                throw new Error(`Error fetching local data: ${response.status}`);
+                                            }
                                             const data = await response.json();
 
                                             // Limpiar la lista antes de agregar nuevos elementos
@@ -164,12 +176,18 @@
                                             } else {
                                                 document.getElementById('prueba').textContent = 'No se encontraron datos.';
                                             }
-
                                         } catch (error) {
                                             console.error('Error al obtener los datos:', error);
                                         }
                                     }
+
+                                    // Llama a la función api() al cargar la página o en el evento deseado
+                                    document.addEventListener('DOMContentLoaded', (event) => {
+                                        api();
+                                        pruebaText();
+                                    });
                                 </script>
+
                             </div>
                         </div>
                     </div>

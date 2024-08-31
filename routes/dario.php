@@ -21,3 +21,5 @@ Route::middleware([
 });
 
 Route::get('/tipo_reserva', [ApiController::class, 'tipo_reserva']);
+
+Route::get('/chatbot', [ApiController::class, 'index'])->name('chatbot');

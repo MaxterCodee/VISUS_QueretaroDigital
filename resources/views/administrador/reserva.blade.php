@@ -193,19 +193,27 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if($reserva->isEmpty())
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4" colspan="4">
+                                    No hay reservas
+                                </td>
+                            </tr>   
+                            @endif
+                            @foreach ($reserva as $reserva)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
+                                    {{ $reserva->nombre }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    Silver
+                                    {{ $reserva->descripcion }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    Laptop
+                                    {{ $reserva->tipos->nombre }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    $2999
+                                    {{ $reserva->coordenadas }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <a data-modal-target="modal-editar" data-modal-toggle="modal-editar"
@@ -216,6 +224,7 @@
                                         class="font-medium text-red-600 dark:text-red-500 hover:underline">Eliminar</a>
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
