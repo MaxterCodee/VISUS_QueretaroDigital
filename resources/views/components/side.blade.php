@@ -33,7 +33,7 @@
             <li>
                 <form action="{{ route('logout') }}" method="POST" class="flex items-center p-2 rounded-lg group">
                     @csrf
-                    <button type="submit" class="flex items-center p-2 rounded-lg group flex items-center w-full text-left {{ Route::is('logout') ? 'text-gray-900 bg-blue-100 dark:text-white dark:bg-gray-700' : 'text-gray-900 dark:text-white hover:bg-red-100 dark:hover:bg-gray-700' }}">
+                    <button type="submit" class="flex items-center p-2 rounded-lg group w-full text-left {{ Route::is('logout') ? 'text-gray-900 bg-blue-100 dark:text-white dark:bg-gray-700' : 'text-gray-900 dark:text-white hover:bg-red-100 dark:hover:bg-gray-700' }}">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span class="ms-3">Cerrar sesión</span>
                     </button>
