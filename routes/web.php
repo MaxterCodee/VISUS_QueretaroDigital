@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AlertasController;
 use Illuminate\Support\Facades\Route;
 require __DIR__.'/toño.php';
 require __DIR__.'/dario.php';
 require __DIR__.'/leo.php';
 require __DIR__.'/max.php';
+
 
 
 
@@ -18,9 +20,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    Route::get('/', [AlertasController::class, 'index'])->name('dashboard');
 
 });

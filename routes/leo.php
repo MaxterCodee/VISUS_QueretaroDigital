@@ -46,6 +46,5 @@ Route::middleware([
 
     Route::get('/admin/predicción',[AdministradorController::class, 'indexMapas'])->name('indexMapas');
 
-    Route::get('/dashboard', [AlertasController::class, 'index'])->name('dashboard');
 
 });

@@ -23,7 +23,7 @@ class RegresionLinealController extends Controller
             $sensores = $reserva->sensores;
 
             foreach ($sensores as $sensor) {
-                $datos = $sensor->dato;
+                $datos = $sensor->datos;
 
                 $samples = [];
                 $targets = [];
