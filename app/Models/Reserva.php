@@ -18,6 +18,6 @@ class Reserva extends Model
 
     public function sensores()
     {
-        return $this->hasMany(Sensore::class);
+        return $this->hasMany(Sensore::class, 'reserva_id');
     }
 }

@@ -21,7 +21,7 @@ class Sensore extends Model
         return $this->belongsTo(Reserva::class, 'reserva_id');
     }
 
-    public function dato()
+    public function datos()
     {
         return $this->hasMany(Dato::class);
     }

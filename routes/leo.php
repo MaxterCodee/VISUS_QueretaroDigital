@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdministradorController;
+use App\Http\Controllers\AlertasController;
 
 Route::get('/leo', function () {
     return 'Ruta de Leo';
@@ -44,5 +45,7 @@ Route::middleware([
     Route::delete('/admin/bomba',[AdministradorController::class, 'eliminarBomba'])->name('eliminarBomba');
 
     Route::get('/admin/predicción',[AdministradorController::class, 'indexMapas'])->name('indexMapas');
+
+    Route::get('/dashboard', [AlertasController::class, 'index'])->name('dashboard');
 
 });

@@ -16,6 +16,6 @@ class Dato extends Model
 
     public function sensor()
     {
-        return $this->belongsTo(Sensore::class);
+        return $this->belongsTo(Sensore::class, 'sensore_id');
     }
 }
