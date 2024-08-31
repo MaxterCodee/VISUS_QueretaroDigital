@@ -16,6 +16,7 @@
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://kit.fontawesome.com/9b5954a8ea.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <!-- Styles -->

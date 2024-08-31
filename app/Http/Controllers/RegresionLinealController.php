@@ -14,7 +14,7 @@ use Phpml\Regression\LeastSquares;
 
 class RegresionLinealController extends Controller
 {
-    public function realizarRegresionLineal()
+    public function realizarRegresionLineal($dias = 10)
     {
         $reservas = Reserva::all();
         $resultados = []; // Array para almacenar los resultados
@@ -45,7 +45,7 @@ class RegresionLinealController extends Controller
                     $regression->train($samples, $targets);
 
                     // Predecir valores usando el modelo entrenado
-                    $predictedValue = $regression->predict([20]);
+                    $predictedValue = $regression->predict([$dias]);
 
                     // Guardar los resultados en el array
                     $resultados[] = [
@@ -53,10 +53,10 @@ class RegresionLinealController extends Controller
                         'reserva_name' => $sensor->reserva->nombre,
                         'sensor_name' => $sensor->nombre,
                         'unidad_medida' => $sensor->tipoSensor->unidad,
-                        'samples' => $samples, // Agregar samples al resultado
-                        'targets' => $targets, // Agregar targets al resultado
+                        'samples' => $samples, // Mostrar samples del sensor actual
+                        'targets' => $targets, // Mostrar targets del sensor actual
                         'predicted_value' => $predictedValue,
-                        'message' => "Valor predicho para 20 días desde la fecha base: " . $predictedValue
+                        'message' => "Valor predicho para {$dias} días desde la fecha base: " . $predictedValue
                     ];
                 } else {
                     // Guardar mensaje de error en el array si no hay suficientes datos
@@ -65,8 +65,8 @@ class RegresionLinealController extends Controller
                         'reserva_name' => $sensor->reserva->nombre,
                         'sensor_name' => $sensor->nombre,
                         'unidad_medida' => $sensor->tipoSensor->unidad,
-                        'samples' => $samples, // Agregar samples al resultado
-                        'targets' => $targets, // Agregar targets al resultado
+                        'samples' => $samples, // Mostrar samples del sensor actual
+                        'targets' => $targets, // Mostrar targets del sensor actual
                         'predicted_value' => null,
                         'message' => "No hay suficientes datos para realizar la regresión lineal."
                     ];
@@ -78,13 +78,11 @@ class RegresionLinealController extends Controller
         return $resultados;
     }
 
-
-
-    public function mostrarResultados()
+    public function mostrarResultados(Request $request)
     {
-        $resultados = $this->realizarRegresionLineal(); // Llama al método para obtener los resultados
-        dd($resultados);
-        return view('regresion.index', compact('resultados')); // Pasa los resultados a la vista
+        $dias = $request->input('dias', 10); // Obtener el valor de días desde la solicitud, por defecto 10
+        $resultados = $this->realizarRegresionLineal($dias); // Llama al método con el número de días
+        return view('regresion.index', compact('resultados', 'dias')); // Pasa los resultados y el número de días a la vista
     }
 
 
