@@ -9,6 +9,7 @@ use App\Models\Sensore;
 use App\Models\TipoReserva;
 use App\Models\TipoSensor;
 use App\Models\Reserva;
+use App\Models\Bomba;
 
 class sensoresSeeder extends Seeder
 {
@@ -18,6 +19,21 @@ class sensoresSeeder extends Seeder
     public function run(): void
     {
         //
+        $bomba = Bomba::create([
+            'horas_limite' => 10000,
+            'horas_actuales' => 9050,
+        ]);
+
+        $bomba = Bomba::create([
+            'horas_limite' => 10000,
+            'horas_actuales' => 4050,
+        ]);
+
+        $bomba = Bomba::create([
+            'horas_limite' => 10000,
+            'horas_actuales' => 5001,
+        ]);
+
         $tipoReserva = TipoReserva::create([
             'nombre' => 'Aguas superficiales',
             'descripcion' => 'Aguas superficiales',

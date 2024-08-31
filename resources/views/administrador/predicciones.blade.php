@@ -42,16 +42,18 @@
                                         console.error("Coordinates are not in the correct format: [lat, lng]");
                                     }
 
-                                    // Añadir capa base al mapa
-                                    L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-                                        attribution: 'Google'
-                                    }).addTo(map);
-                                };
-                                document.body.appendChild(script);
-                            });
-                        </script>
-
-                    </section>
+                                                // Añadir capa base al mapa
+                                                L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+                                                    attribution: 'Google'
+                                                }).addTo(map);
+                                            };
+                                            document.body.appendChild(script);
+                                        });
+                                    </script>
+                                @endforeach
+                            </section>
+                        </div>
+                    </div>
                 </div>
             @endforeach
         </div>
