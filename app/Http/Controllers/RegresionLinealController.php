@@ -17,52 +17,40 @@ class RegresionLinealController extends Controller
         // 1. Recuperar los datos necesarios de la base de datos
         $datos = Dato::with('sensor.tipoSensor', 'sensor.reserva')->get();
 
-        // Verificar si hay registros
-        if ($datos->isEmpty()) {
+        // 2. Preparar los datos para la regresión lineal
+        $samples = [];
+        $targets = [];
+
+        foreach ($datos as $dato) {
+            if ($dato->sensor) { // Verificar si el sensor existe
+                $samples[] = [
+                    $dato->sensor->tipo_sensor_id,
+                    $dato->sensor->reserva_id,
+                ];
+                $targets[] = $dato->valor;
+            }
+        }
+
+        // Verificar si tenemos datos suficientes para entrenar
+        if (empty($samples) || empty($targets)) {
             return response()->json([
-                'mensaje' => 'No hay registros'
-            ], 404);
+                'error' => 'No hay suficientes datos para realizar la regresión lineal.',
+            ], 400);
         }
 
-        // 2. Agrupar datos por 'reserva_id'
-        $agrupadosPorReserva = $datos->groupBy('sensor.reserva_id');
+        // 3. Crear y entrenar el modelo de regresión lineal
+        $regresion = new LeastSquares();
+        $regresion->train($samples, $targets);
 
-        // 3. Inicializar array para almacenar predicciones por 'reserva_id'
-        $resultados = [];
+        // 4. Realizar una predicción
+        // Ejemplo: predecir el valor del sensor con tipo_sensor_id = 2 y reserva_id = 5
+        $prediccion = $regresion->predict([2, 5]);
 
-        // 4. Realizar la regresión lineal para cada grupo de 'reserva_id'
-        foreach ($agrupadosPorReserva as $reservaId => $grupo) {
-            // Preparar los datos para la regresión lineal por cada reserva
-            $samples = $grupo->map(function ($dato) {
-                return [
-                    $dato->sensor->tipo_sensor_id, // Tipo de sensor como variable independiente
-                ];
-            })->toArray();
-
-            $targets = $grupo->pluck('valor')->toArray(); // Variable dependiente (valor del dato)
-
-            // Crear y entrenar el modelo de regresión lineal
-            $regression = new LeastSquares();
-            $regression->train($samples, $targets);
-
-            // Realizar una predicción para cada registro del grupo
-            $predicciones = $grupo->map(function ($dato) use ($regression) {
-                return [
-                    'tipo_sensor_id' => $dato->sensor->tipo_sensor_id,
-                    'prediccion' => $regression->predict([$dato->sensor->tipo_sensor_id]),
-                ];
-            })->toArray();
-
-            // Guardar las predicciones por reserva
-            $resultados[$reservaId] = $predicciones;
-        }
-
-        // 5. Mostrar los resultados de todas las predicciones
+        // 5. Mostrar los resultados
         return response()->json([
-            'resultados' => $resultados,
+            'prediccion' => $prediccion,
         ]);
     }
-
 
 
 
