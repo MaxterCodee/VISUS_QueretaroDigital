@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dato;
+use App\Models\Reserva;
+use Carbon\Carbon;
 use Phpml\Regression\LinearRegression;
 use Phpml\Dataset\ArrayDataset;
 
@@ -14,75 +16,189 @@ class RegresionLinealController extends Controller
 {
     public function realizarRegresionLineal()
     {
-        // 1. Recuperar los datos necesarios de la base de datos
-        $datos = Dato::with('sensor.tipoSensor', 'sensor.reserva')->get();
+        $reservas = Reserva::all();
+        $resultados = []; // Array para almacenar los resultados
 
-        // 2. Preparar los datos para la regresión lineal
-        $samples = [];
-        $targets = [];
+        foreach ($reservas as $reserva) {
+            $sensores = $reserva->sensores;
 
-        foreach ($datos as $dato) {
-            if ($dato->sensor) { // Verificar si el sensor existe
-                $samples[] = [
-                    $dato->sensor->tipo_sensor_id,
-                    $dato->sensor->reserva_id,
-                ];
-                $targets[] = $dato->valor;
+            foreach ($sensores as $sensor) {
+                $datos = $sensor->dato;
+
+                $samples = [];
+                $targets = [];
+
+                foreach ($datos as $dato) {
+                    // Convertir la fecha 'created_at' a un valor numérico, por ejemplo, número de días desde una fecha base
+                    $createdAt = Carbon::parse($dato->created_at);
+                    $days = $createdAt->diffInDays(Carbon::now()); // Calcula el número de días desde hoy
+
+                    // Agregar el valor y el objetivo a las muestras y targets
+                    $samples[] = [$days];
+                    $targets[] = $dato->valor;
+                }
+
+                // Asegúrate de tener al menos dos puntos de datos para hacer una regresión
+                if (count($samples) > 1) {
+                    // Entrenar el modelo de regresión lineal para el sensor
+                    $regression = new LeastSquares();
+                    $regression->train($samples, $targets);
+
+                    // Predecir valores usando el modelo entrenado
+                    $predictedValue = $regression->predict([20]);
+
+                    // Guardar los resultados en el array
+                    $resultados[] = [
+                        'sensor_id' => $sensor->id,
+                        'reserva_name' => $sensor->reserva->nombre,
+                        'sensor_name' => $sensor->nombre,
+                        'unidad_medida' => $sensor->tipoSensor->unidad,
+                        'samples' => $samples, // Agregar samples al resultado
+                        'targets' => $targets, // Agregar targets al resultado
+                        'predicted_value' => $predictedValue,
+                        'message' => "Valor predicho para 20 días desde la fecha base: " . $predictedValue
+                    ];
+                } else {
+                    // Guardar mensaje de error en el array si no hay suficientes datos
+                    $resultados[] = [
+                        'sensor_id' => $sensor->id,
+                        'reserva_name' => $sensor->reserva->nombre,
+                        'sensor_name' => $sensor->nombre,
+                        'unidad_medida' => $sensor->tipoSensor->unidad,
+                        'samples' => $samples, // Agregar samples al resultado
+                        'targets' => $targets, // Agregar targets al resultado
+                        'predicted_value' => null,
+                        'message' => "No hay suficientes datos para realizar la regresión lineal."
+                    ];
+                }
             }
         }
 
-        // Verificar si tenemos datos suficientes para entrenar
-        if (empty($samples) || empty($targets)) {
-            return response()->json([
-                'error' => 'No hay suficientes datos para realizar la regresión lineal.',
-            ], 400);
-        }
-
-        // 3. Crear y entrenar el modelo de regresión lineal
-        $regresion = new LeastSquares();
-        $regresion->train($samples, $targets);
-
-        // 4. Realizar una predicción
-        // Ejemplo: predecir el valor del sensor con tipo_sensor_id = 2 y reserva_id = 5
-        $prediccion = $regresion->predict([2, 5]);
-
-        // 5. Mostrar los resultados
-        return response()->json([
-            'prediccion' => $prediccion,
-        ]);
+        // Retornar el array de resultados
+        return $resultados;
     }
 
 
 
-    //
+    public function mostrarResultados()
+    {
+        $resultados = $this->realizarRegresionLineal(); // Llama al método para obtener los resultados
+        dd($resultados);
+        return view('regresion.index', compact('resultados')); // Pasa los resultados a la vista
+    }
+
+
+
+
+
+
+
     // public function realizarRegresionLineal()
     // {
-    //     // 1. Recuperar los datos necesarios de la base de datos
-    //     $datos = Dato::with('sensor.tipoSensor', 'sensor.reserva')->get();
+    //     $reservas = Reserva::all();
 
-    //     // 2. Preparar los datos para la regresión lineal
-    //     // Variables independientes (tipo_sensor_id, reserva_id)
-    //     $samples = $datos->map(function ($dato) {
-    //         return [
-    //             $dato->sensor->tipo_sensor_id, // Tipo de sensor como una variable independiente
-    //             $dato->sensor->reserva_id, // Reserva como otra variable independiente
-    //         ];
-    //     })->toArray();
+    //     foreach($reservas as $reserva)
+    //     {
+    //         $sensores = $reserva->sensores;
+    //         foreach($sensores as $sensor)
+    //         {
+    //             $datos = $sensor->dato;
 
-    //     // Variable dependiente (valor del dato)
-    //     $targets = $datos->pluck('valor')->toArray();
+    //             $samples = [];
+    //             $targets = [];
 
-    //     // 3. Crear y entrenar el modelo de regresión lineal
-    //     $regression = new LeastSquares();
-    //     $regression->train($samples, $targets);
+    //             foreach ($datos as $dato) {
+    //                 // Convertir la fecha 'created_at' a un valor numérico, por ejemplo, número de días desde una fecha base
+    //                 $createdAt = Carbon::parse($dato->created_at);
+    //                 $days = $createdAt->diffInDays(Carbon::now()); // Calcula el número de días desde hoy
 
-    //     // 4. Realizar una predicción
-    //     // Ejemplo: predecir el valor del sensor con tipo_sensor_id = 2 y reserva_id = 5
-    //     $prediccion = $regression->predict([2, 5]);
+    //                 // Agregar el valor y el objetivo a las muestras y targets
+    //                 $samples[] = [$days];
+    //                 $targets[] = $dato->valor;
+    //             }
 
-    //     // 5. Mostrar los resultados
-    //     return response()->json([
-    //         'prediccion' => $prediccion,
-    //     ]);
+    //             // Asegúrate de tener al menos dos puntos de datos para hacer una regresión
+    //             if (count($samples) > 1) {
+    //                 // Entrenar el modelo de regresión lineal para el sensor
+    //                 $regression = new LeastSquares();
+    //                 $regression->train($samples, $targets);
+
+    //                 // Opcional: Predecir valores usando el modelo entrenado
+    //                 // Ejemplo: predecir valor para 30 días desde la fecha base
+    //                 $predictedValue = $regression->predict([20]);
+
+    //                 echo "Sensor ID: " . $sensor->id . "<br>";
+    //                 echo "Valor predicho para 20 días desde la fecha base: " . $predictedValue . "<br>";
+    //             } else {
+    //                 echo "Sensor ID: " . $sensor->id . " - No hay suficientes datos para realizar la regresión lineal.<br>";
+    //             }
+    //         }
+    //     }
+    // }
+
+
+
+    // public function realizarRegresionLineal()
+    // {
+    //     $reservas = Reserva::all();
+    //     $samples = [];
+    //     $targets = [];
+
+    //     foreach($reservas as $reserva)
+    //     {
+    //         $sensores = $reserva->sensores;
+    //         foreach($sensores as $sensor)
+    //         {
+    //             $datos = $sensor->dato;
+
+    //             foreach ($datos as $dato) {
+    //                 // Convertir la fecha 'created_at' a un valor numérico, por ejemplo, número de días desde una fecha base
+    //                 $createdAt = Carbon::parse($dato->created_at);
+    //                 $days = $createdAt->diffInDays(Carbon::now()); // Calcula el número de días desde hoy
+
+    //                 // Agregar el valor y el objetivo a las muestras y targets
+    //                 $samples[] = [$days];
+    //                 $targets[] = $dato->valor;
+    //             }
+    //         }
+    //     }
+
+    //     // Asegúrate de tener al menos dos puntos de datos para hacer una regresión
+    //     if (count($samples) > 1) {
+    //         // Entrenar el modelo de regresión lineal
+    //         $regression = new LeastSquares();
+    //         $regression->train($samples, $targets);
+
+    //         // Opcional: Predecir valores usando el modelo entrenado
+    //         $predictedValue = $regression->predict([30]); // Ejemplo: predecir valor para 30 días desde la fecha base
+
+    //         echo "Valor predicho para 30 días desde la fecha base: " . $predictedValue;
+    //     } else {
+    //         echo "No hay suficientes datos para realizar la regresión lineal.";
+    //     }
+    // }
+
+
+
+
+    // public function realizarRegresionLineal()
+    // {
+    //     $reservas = Reserva::all();
+    //     foreach($reservas as $reserva)
+    //     {
+    //         $sensores = $reserva->sensores;
+    //         foreach($sensores as $sensor)
+    //         {
+    //             $datos = $sensor->dato;
+    //             // dd($datos);
+    //             echo '<pre>';
+    //             print_r($datos);
+    //             echo '</pre>';
+
+
+    //         }
+    //     }
     // }
 }
+
+
