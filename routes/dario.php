@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
+
 // RUTAS QUE NO REQUIEREN AUTENTICACION
 Route::get('/dario', function () {
     return 'Ruta de Dario';
@@ -17,3 +19,5 @@ Route::middleware([
 
 
 });
+
+Route::get('/tipo_reserva', [ApiController::class, 'tipo_reserva']);
