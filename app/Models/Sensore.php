@@ -13,9 +13,13 @@ class Sensore extends Model
 
     public function tipoSensor()
     {
-        return $this->belongsTo(TipoSensor::class);
+        return $this->belongsTo(TipoSensor::class, 'tipo_sensor_id');
     }
 
+    public function reserva()
+    {
+        return $this->belongsTo(Reserva::class, 'reserva_id');
+    }
 
     public function dato()
     {
