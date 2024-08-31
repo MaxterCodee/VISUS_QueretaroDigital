@@ -50,7 +50,6 @@
                                             document.body.appendChild(script);
                                         });
                                     </script>
-                                @endforeach
                             </section>
                         </div>
                     </div>
