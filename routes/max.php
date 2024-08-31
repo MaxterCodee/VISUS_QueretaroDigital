@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RegresionLinealController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/max', function () {
@@ -13,6 +14,6 @@ Route::middleware([
 ])->group(function () {
 
     // AQUI VAN LAS RUTAS QUE REQUIEREN AUTENTICACION
-
+    Route::get('/regresion-linear', [RegresionLinealController::class, 'realizarRegresionLineal']);
 
 });

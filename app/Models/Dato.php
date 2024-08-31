@@ -11,7 +11,7 @@ class Dato extends Model
 
     protected $fillable = [
         'valor',
-        'sensor_id',
+        'sensore_id',
     ];
 
     public function sensor()
