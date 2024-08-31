@@ -15,5 +15,6 @@ Route::middleware([
 
     // AQUI VAN LAS RUTAS QUE REQUIEREN AUTENTICACION
     Route::get('/regresion-linear', [RegresionLinealController::class, 'realizarRegresionLineal']);
+    Route::get('/regresion', [RegresionLinealController::class, 'mostrarResultados']);
 
 });
